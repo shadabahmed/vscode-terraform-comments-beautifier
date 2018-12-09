@@ -14,33 +14,26 @@ export function activate(context: vscode.ExtensionContext) {
     return comment.join('');
   }
 
-  vscode.window.showInformationMessage('extension "extension.beautifyTerraformComments" is now active!');
   let command = vscode.commands.registerCommand('extension.beautifyTerraformComments', () => {
 
-    const {activeTextEditor} = vscode.window;
-    if(activeTextEditor) {
-      vscode.window.showInformationMessage(activeTextEditor.document.languageId);
-    }
-    
-    if (activeTextEditor && activeTextEditor.document.languageId === 'hcl') {
-        const {document} = activeTextEditor;
-        vscode.window.showInformationMessage(JSON.stringify(document));
-
-        const edit = new vscode.WorkspaceEdit();
-        for(let i = 0; i < document.lineCount; i++) {
-          let line = document.lineAt(i);
-          if(line.text.startsWith('#'))
-          {
-            let prevNotComment = i == 0 || (!document.lineAt(i - 1).text.startsWith('#'));
-            let nextNotComment = (i == document.lineCount - 1) || (!document.lineAt(i + 1).text.startsWith('#'));
-            if(prevNotComment && nextNotComment){
-              let comment = getComment(line.text);
-              edit.insert(document.uri, line.range.start, comment +'\n');
-              edit.insert(document.uri, line.range.end, '\n' + comment);              
-            }
+  const {activeTextEditor} = vscode.window;    
+  if (activeTextEditor && activeTextEditor.document.languageId === 'hcl') {
+      const {document} = activeTextEditor;
+      const edit = new vscode.WorkspaceEdit();
+      for(let i = 0; i < document.lineCount; i++) {
+        let line = document.lineAt(i);
+        if(line.text.startsWith('#'))
+        {
+          let prevNotComment = i == 0 || (!document.lineAt(i - 1).text.startsWith('#'));
+          let nextNotComment = (i == document.lineCount - 1) || (!document.lineAt(i + 1).text.startsWith('#'));
+          if(prevNotComment && nextNotComment){
+            let comment = getComment(line.text);
+            edit.insert(document.uri, line.range.start, comment +'\n');
+            edit.insert(document.uri, line.range.end, '\n' + comment);              
           }
         }
-        return vscode.workspace.applyEdit(edit);
+      }
+      return vscode.workspace.applyEdit(edit);
     }
   });
   context.subscriptions.push(command);
