@@ -1,6 +1,6 @@
 # terraform-comments-beautifier README
 
-[![Release Status](https://vsmarketplacebadge.apphb.com/version-short/shadabahmed.vscode-azureterraform.svg)](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureterraform)
+[![Release Status](https://vsmarketplacebadge.apphb.com/version-short/sahmed.terraform-comments-beautifier.svg)](https://marketplace.visualstudio.com/items?itemName=sahmed.terraform-comments-beautifier)
 
 This extension beautifies comments in terraform files. Changes them from:
 
